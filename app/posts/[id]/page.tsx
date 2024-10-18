@@ -1,4 +1,6 @@
 import UpvoteBtn from "@/components/upvote-btn";
+import prisma from "@/lib/db";
+import { notFound } from "next/navigation";
 
 type Props = {
   params: {
@@ -7,8 +9,15 @@ type Props = {
 };
 
 const Post = async ({ params }: Props) => {
-  const response = await fetch(`https://dummyjson.com/post/${params.id}`);
-  const post = await response.json();
+  const post = await prisma.post.findUnique({
+    where: {
+      id: Number(params.id),
+    },
+  });
+
+  if (!post) {
+    return notFound();
+  }
 
   return (
     <main className="px-7 pt-24 text-center">
