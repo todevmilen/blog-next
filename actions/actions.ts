@@ -3,14 +3,16 @@
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
-export async function createPost(formData: FormData) {
-  const title = formData.get("title") as string;
-  const body = formData.get("body") as string;
+type Props = {
+  title: string;
+  body: string;
+};
 
+export async function createPost(data: Props) {
   await prisma.post.create({
     data: {
-      title,
-      body,
+      title: data.title,
+      body: data.body,
     },
   });
 
